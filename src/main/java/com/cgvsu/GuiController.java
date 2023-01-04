@@ -13,22 +13,16 @@ import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.vecmath.Vector3f;
 
 import com.cgvsu.model.Model;
 import com.cgvsu.objreader.ObjReader;
 import com.cgvsu.render_engine.Camera;
-
-import static java.lang.System.in;
-import static java.lang.System.out;
 
 public class GuiController {
     private final static boolean willItWriteInformationToConsole = true;
@@ -48,7 +42,8 @@ public class GuiController {
     @FXML
     private Canvas canvas;
 
-    private Model mesh = null;
+    private ArrayList<Model> models = new ArrayList<>();
+
 
     private Camera camera = new Camera(
             new Vector3f(0, 00, 100),
@@ -64,16 +59,15 @@ public class GuiController {
 
         timeline = new Timeline();
         timeline.setCycleCount(Animation.INDEFINITE);
-
         KeyFrame frame = new KeyFrame(Duration.millis(15), event -> {
             double width = canvas.getWidth();
             double height = canvas.getHeight();
 
             canvas.getGraphicsContext2D().clearRect(0, 0, width, height);
             camera.setAspectRatio((float) (width / height));
+            if (models != null) {
 
-            if (mesh != null) {
-                RenderEngine.render(canvas.getGraphicsContext2D(), camera, mesh, (int) width, (int) height);
+                RenderEngine.render(canvas.getGraphicsContext2D(), camera, models, (int) width, (int) height);
             }
         });
 
@@ -81,9 +75,11 @@ public class GuiController {
         timeline.play();
     }
 
+    FileChooser fileChooser = new FileChooser();
+
+
     @FXML
     private void onOpenModelMenuItemClick() {
-        FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
         fileChooser.setTitle("Load Model");
 
@@ -96,24 +92,32 @@ public class GuiController {
 
         try {
             String fileContent = Files.readString(fileName);
-            mesh = ObjReader.read(fileContent, willItWriteInformationToConsole);
+            models.add(ObjReader.read(fileContent, willItWriteInformationToConsole));
             // todo: обработка ошибок
         } catch (IOException exception) {
 
         }
     }
 
+
     @FXML
     private void onWriteModelMenuItemClick() throws IOException {
-                String fileName = fileChooserSave.getSelectedFile().getPath();
-
-                if (!fileName.toLowerCase().endsWith(".txt")) {
-                    fileName += ".txt";
-                }
-
-                ObjWriter.write(fileName, mesh);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Model (*.obj)", "*.obj"));
+        fileChooser.setTitle("Save Model");
+        fileChooser.setInitialFileName("Saved Model");
+        try {
+            File file = fileChooser.showSaveDialog((Stage) canvas.getScene().getWindow());
+            ObjWriter.write(file.getAbsolutePath(), models.get(models.size() - 1));
+            // todo: обработка ошибок
+        } catch (Exception exception) {
 
         }
+    }
+
+    public void onOpenModelFillingPolygons(){
+
+    }
+
 
 
 

@@ -14,14 +14,21 @@
                 <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="F"/>
             </accelerator>
             </MenuItem>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Write to file">
             <MenuItem mnemonicParsing="false" onAction="#onWriteModelMenuItemClick" text="Write to file model">
                 <accelerator>
                     <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="S"/>
                 </accelerator>
             </MenuItem>
         </Menu>
+
+        <Menu mnemonicParsing="false" text="Fill Polygons">
+            <MenuItem mnemonicParsing="false" onAction="#onOpenModelFillingPolygons" text="Fill Polygons">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" control="DOWN" meta="UP" shift="UP" shortcut="UP" code="A"/>
+                </accelerator>
+            </MenuItem>
+        </Menu>
+
         <Menu mnemonicParsing="false" text="Camera Options">
             <MenuItem mnemonicParsing="false" onAction="#handleCameraForward" text="Forward">
                 <accelerator>
