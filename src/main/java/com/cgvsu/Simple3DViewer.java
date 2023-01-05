@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -16,6 +17,7 @@ public class Simple3DViewer extends Application {
     public void start(Stage stage) throws IOException {
         //AnchorPane viewport = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("fxml/gui.fxml")));
         AnchorPane viewport = FXMLLoader.load(getClass().getResource("fxml/gui.fxml"));
+
 
         Scene scene = new Scene(viewport);
         stage.setMinWidth(1600);
